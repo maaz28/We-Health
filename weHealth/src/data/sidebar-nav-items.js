@@ -19,7 +19,7 @@ export default function() {
     {
       title: "BUY TOKENS",
       htmlBefore: '<i class="material-icons">view_module</i>',
-      to: "/profile",
+      to: "/buy-token",
     }
   ];
 }

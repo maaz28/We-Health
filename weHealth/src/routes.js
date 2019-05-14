@@ -7,7 +7,7 @@ import { BaseLayout } from "./layouts";
 import { LandingLayout } from "./layouts";
 
 
-import {currentUser} from './config/firebase'
+import { currentUser } from './config/firebase'
 // Route Views
 // import BlogOverview from "./views/BlogOverview";
 // import UserProfileLite from "./views/UserProfileLite";
@@ -20,6 +20,7 @@ import Signup from './components/Signup/Signup'
 import AddData from './components/addData'
 import RequestData from './components/requestData'
 import RecieveData from './components/recieve'
+import BuyToken from './components/addToken'
 // import BlogPosts from "./views/BlogPosts";
 // import MyLibrary from "./views/MyLibrary";
 // import Welcome from "./views/Welcome";
@@ -54,8 +55,8 @@ export default [
     component: RequestData
   },
   {
-    path: "/recieve",
+    path: "/add-token",
     layout: DefaultLayout,
-    component: RecieveData
+    component: BuyToken
   }
 ];

@@ -106,13 +106,13 @@ export default class RequestData extends Component {
                             .then(() => {
                                 this.setState({ open: false })
                                 swal({
-                                    icon:'success',
-                                    text:'File Successfully Uploaded!'
+                                    icon: 'success',
+                                    text: 'File Successfully Uploaded!'
                                 })
                             })
-                            .catch((e)=>{
+                            .catch((e) => {
                                 swal({
-                                    icon:'warning',
+                                    icon: 'warning',
                                     text: e.message
                                 })
                             })
@@ -120,7 +120,7 @@ export default class RequestData extends Component {
             })
         e.preventDefault()
     }
-    
+
 
     openModal = ({ uid, data }) => {
         this.handleOpen();
@@ -178,23 +178,30 @@ export default class RequestData extends Component {
 
                 <Container fluid className="main-content-container px-4 pb-4">
                     <Row noGutters className="page-header py-4">
-                        <PageTitle title="REQUEST DATA" subtitle="Component" className="text-sm-left mb-3" />
+                        <PageTitle title="REQUEST" subtitle="Component" className="text-sm-left mb-3" />
                     </Row>
                     <Row>
-                        <Col>
-                            <Paper>
-                                <Row>
-                                    <Col lg={8}>
-                                        <h5>Available Requests</h5>
-                                        {this.state.data ? (<Table data={this.state.data} buttonText='accept' onClick={this.openModal} />) : ('')}
+                        <Col lg={12} >
+                            <Row>
+                                <Col lg={8}>
+                                    <Paper>
 
-                                    </Col>
-                                    <Col>
-                                        <h5>Request Data</h5>
-                                        <Button text='Request' onClick={this.handleOpen} />
-                                    </Col>
-                                </Row>
-                            </Paper>
+                                        <Col>
+                                            <h5>Requests</h5>
+                                            {this.state.data ? (<Table data={this.state.data} buttonText='accept' onClick={this.openModal} />) : ('')}
+
+                                        </Col>
+                                    </Paper>
+                                </Col>
+                                <Col>
+                                    <Paper>
+                                        <Col>
+                                            <h5>Ask for Data</h5>
+                                            <Button text='Request' onClick={this.handleOpen} />
+                                        </Col>
+                                    </Paper>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
 

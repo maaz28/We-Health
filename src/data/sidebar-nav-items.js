@@ -7,7 +7,7 @@ export default function() {
       htmlAfter: "" 
     },
     {
-      title: "REQUEST DATA",
+      title: "REQUEST",
       htmlBefore: '<i class="material-icons">vertical_split</i>',
       to: "/request",
     },

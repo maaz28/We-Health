@@ -26,7 +26,7 @@ export default class Recieve extends Component {
     componentDidMount() {
         const { uid } = this.state
         console.log(this.state)
-        firebase.database().ref('Accepts').child(uid)
+        firebase.database().ref('Accepts')
             .on('value', (data) => {
                 let userData = data.val()
                 let requests = []

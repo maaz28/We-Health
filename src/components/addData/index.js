@@ -81,7 +81,8 @@ export default class AddData extends Component{
             ]
             this.setState(prevState=>({
                 data,
-                dataSetButtonDisabled:!prevState.dataSetButtonDisabled
+                dataSetButtonDisabled:!prevState.dataSetButtonDisabled,
+                check: !prevState.check
             }))
     }
 
@@ -100,6 +101,7 @@ export default class AddData extends Component{
         const ExcelFile = ReactExport.ExcelFile;
         const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
         const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+        const downloadDisplay = this.state.check ? {display:'none'} : {}
         return(
             <>
             <LoginConsumer>
@@ -163,7 +165,7 @@ export default class AddData extends Component{
                         <Button text='Submit' />
                         </div> */}
                         <Button text='Submit' isDisabled={!this.state.dataSetButtonDisabled} onClick={this.createDataSet} />
-                                <ExcelFile filename={`WeHealth-${new Date().getTime().toString()}`} element={<Button text='Download ExcelSheet' isDisabled={this.state.dataSetButtonDisabled} onClick={this.download}  />}>
+                                <ExcelFile filename={`WeHealth-${new Date().getTime().toString()}`} element={<Button style={downloadDisplay} text='Download ExcelSheet' isDisabled={this.state.dataSetButtonDisabled} onClick={this.download}  />}>
                             <ExcelSheet data={this.state.data} name="DiseaseData" >
                                 <ExcelColumn label='Test Name' value='name' />
                                 <ExcelColumn label='Result' value='value' />

@@ -52,10 +52,12 @@ const logout = (ev) => {
     })
 }
 
-const sendRequest = (uid,data) => {
+const sendRequest = (uid,data,count,address) => {
   let obj = {
     data,
-    uid
+    uid,
+    count,
+    address
   }
   firebase.database().ref('requests').child(uid).push(obj)
 }

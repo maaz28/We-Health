@@ -31,12 +31,14 @@ function SimpleTable(props) {
       <Table className={classes.table}>
         <TableBody>
           {props.data.map(item => {
-            return item.url ? ( <TableRow>
+            return item.url ? ( 
+            <TableRow>
               <TableCell component="th" scope="row">
                 {item.data}
-              </TableCell>
+              </TableCell> 
               <TableCell align="right" ><Button isSendUid={item.url} text={props.buttonText} onClick={props.onClick} /></TableCell>
-            </TableRow>) : (<TableRow>
+            </TableRow>
+            ) : (<TableRow>
             <TableCell component="th" scope="row">
               {item.data}
             </TableCell>
@@ -46,7 +48,7 @@ function SimpleTable(props) {
           }
          
         </TableBody>
-      </Table>
+      </Table> 
     </Paper>
   );
 }

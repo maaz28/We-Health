@@ -8,6 +8,9 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  root:{
+    minWidth:'18px'
+  },
   input: {
     display: 'none',
   },
@@ -27,9 +30,9 @@ class ContainedButtons extends React.Component {
     const { classes } = this.props;
 
     return (
-      !this.props.isSendUid ? <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.props.onClick()} className={classes.button}>
+      !this.props.isSendUid ? <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.props.onClick()} className={[classes.button,classes.root]}>
         {this.props.text}
-      </Button> : <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.onClick()} className={classes.button}>
+      </Button> : <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.onClick()} className={[classes.button, classes.root]}>
           {this.props.text}
         </Button>
     );

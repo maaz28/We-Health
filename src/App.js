@@ -7,6 +7,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./shards-dashboard/styles/shards-dashboards.1.1.0.min.css";
+import { getTokenBalance, getAccountAddress} from './utils/blockchainFunctions'
 
 export default class App extends Component {
   
@@ -42,6 +43,10 @@ export default class App extends Component {
     sessionStorage.setItem('uid',uid)
   }
   
+  componentDidMount(){
+    getTokenBalance();
+    getAccountAddress()
+  }
 
   render(){
     console.log(this.state)

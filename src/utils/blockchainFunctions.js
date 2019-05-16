@@ -4,11 +4,22 @@ import weHealthController from '../interface/weHealthController';
 export const getTokenBalance = async () => {
   try {
     const tokenBalance = await weHealthController.methods.getBalance().call();
-    console.log(tokenBalance)
+    console.log(tokenBalance.toString())
+    return tokenBalance.toString()
   } catch (e) {
     console.log(e);
   }
 };
+
+export const getAccountAddress = async () => {
+  try {
+    const accounts = await web3.eth.getAccounts();
+    console.log(accounts[0]);
+    return accounts[0]
+  } catch  (e){
+    console.log(e)
+  }
+}
 
 export const buyDataForTokens = async (tokens) => {
   try {
@@ -46,7 +57,6 @@ export const getTokensForData = async (address) => {
     console.log(e);
   }
 };
-
 
 
 export const buyTokens = async (ether) => {

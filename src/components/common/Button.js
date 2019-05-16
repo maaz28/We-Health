@@ -28,9 +28,9 @@ class ContainedButtons extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+    console.log(this.props.address)
     return (
-      !this.props.isSendUid ? <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.props.onClick()} className={[classes.button,classes.root]}>
+      !this.props.isSendUid ? <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.props.onClick(this.props.address)} className={[classes.button,classes.root]}>
         {this.props.text}
       </Button> : <Button variant="contained" style={this.props.style} type={this.props.buttonType} size='large' disabled={this.props.isDisabled} color="primary" onClick={() => this.onClick()} className={[classes.button, classes.root]}>
           {this.props.text}

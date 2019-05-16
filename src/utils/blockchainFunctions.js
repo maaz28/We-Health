@@ -3,9 +3,12 @@ import weHealthController from '../interface/weHealthController';
 
 export const getTokenBalance = async () => {
   try {
-    const tokenBalance = await weHealthController.methods.getBalance().call();
-    console.log(tokenBalance.toString())
-    return tokenBalance.toString()
+    const accounts = await web3.eth.getAccounts();
+
+    const tokenBalance = await weHealthController.methods.getBalance().call({
+      from: accounts[0]
+    });
+    return (tokenBalance.toString()/1000000000000000000)
   } catch (e) {
     console.log(e);
   }
@@ -39,7 +42,6 @@ export const buyDataForTokens = async (tokens) => {
   }
 };
 
-
 export const getTokensForData = async (address) => {
   try {
     const accounts = await web3.eth.getAccounts();
@@ -59,24 +61,6 @@ export const getTokensForData = async (address) => {
 };
 
 
-export const buyTokens = async (ether) => {
-  try {
-    const accounts = await web3.eth.getAccounts();
-    await weHealthController.methods
-      .buyToken().send({
-        from: accounts[0],
-        value: web3.utils.toWei(ether, 'ether')
-      }).on('transactionHash', (hash) => {
-        console.log(hash)
-        // that.setState({transactionHash: 'https://rinkeby.etherscan.io/tx/' + hash})
-      }).on('confirmation', function (confirmationNumber, receipt) {
-        console.log(confirmationNumber + ' ' + receipt);
-        console.log("Transaction confirmed");
-      });
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 
 

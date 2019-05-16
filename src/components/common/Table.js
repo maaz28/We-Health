@@ -41,11 +41,12 @@ function SimpleTable(props) {
             ) : (<TableRow>
             <TableCell component="th" scope="row">
               {item.data}
-            </TableCell>
-            <TableCell align="right" ><Button isSendUid={item} text={props.buttonText} onClick={props.onClick} /></TableCell>
+            </TableCell> 
+            {console.log(item)}
+                <TableCell align="right" ><Button isSendUid={item} address={item.address} text={props.buttonText} onClick={props.onClick} /></TableCell>
           </TableRow>)
           })
-          }
+          } 
          
         </TableBody>
       </Table> 

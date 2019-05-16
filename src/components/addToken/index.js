@@ -6,21 +6,63 @@ import Paper from '../common/Paper'
 import Input from '../common/InputFullWidth'
 import PageTitle from '../common/PageTitle'
 import Button from '../common/Button'
-import Upload from '../common/UploadButton'
-import Dialog from '../common/Dialog'
-import { LoginConsumer } from "../../config/contextConfig.js";
-import { sendRequest, getRequests } from '../../config/firebase'
-import * as firebase from 'firebase'
+import weHealthController from '../../interface/weHealthController';
+import web3 from '../../interface/web3';
+import swal from 'sweetalert';
+
+//BLOCKCHAIN DEPENDENCIES
+// import web3 from '../interface/web3';
+// import weHealthController from '../interface/weHealthController';
 
 export default class Recieve extends Component {
     constructor() {
         super();
         this.state = {
-            data: [],
-            downloadLink: ''
+            value: '',
+            downloadLink: '',
+            transactionHash : ''
         }
     }
 
+    buyTokens = async (ether) => {
+        let that = this;
+        try {
+            const accounts = await web3.eth.getAccounts();
+            await weHealthController.methods
+                .buyToken().send({
+                    from: accounts[0],
+                    value: web3.utils.toWei(ether, 'ether')
+                }).on('transactionHash', (hash) => {
+                    console.log(hash)
+                    that.setState({transactionHash: 'https://rinkeby.etherscan.io/tx/' + hash})
+                }).on('confirmation', function (confirmationNumber, receipt) {
+                    console.log(confirmationNumber + ' ' + receipt);
+                    console.log("Transaction confirmed");
+                    that.setState({
+                        transactionHash : ''
+                    })
+                    swal({
+                        title: "Transaction Successfull",
+                        text: that.state.value * 100 + " Tokens have added to your account.",
+                        icon: "success",
+                        dangerMode: false,
+                    })
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    tokenHandler = (ev) => {
+        this.setState({
+            value: ev.target.value
+        })
+    }
+
+    tokenBuyHandler = () => {
+        this.buyTokens(this.state.value)
+            .then(res => console.log(res))
+    }
 
     render() {
         return (
@@ -36,10 +78,13 @@ export default class Recieve extends Component {
                                     <Col>
                                         <h5>ADD TOKEN</h5>
                                         <Col lg={5} >
-                                            <Input label='Enter Token' />
+                                            <Input label='Enter Token' onChange={this.tokenHandler} />
                                         </Col>
                                         <Col lg={5} >
-                                            <Button text='buy' />
+                                            <Button text='buy' onClick={this.tokenBuyHandler} />
+                                        </Col>
+                                        <Col lg={5} >
+                                            Track your transaction here <a href={this.state.transactionHash} target="_blank"> {this.state.transactionHash} </a>
                                         </Col>
                                     </Col>
                                 </Row>

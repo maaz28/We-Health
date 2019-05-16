@@ -12,8 +12,11 @@ import Table from "../common/Table";
 import Dialog from "../common/Dialog";
 import { LoginConsumer } from "../../config/contextConfig.js";
 import { sendRequest, getRequests } from "../../config/firebase";
-import { getAccountAddress } from "../../utils/blockchainFunctions";
+import { getAccountAddress, getTokenBalance } from "../../utils/blockchainFunctions";
 import * as firebase from "firebase";
+import weHealthController from "../../interface/weHealthController";
+import web3 from "../../interface/web3";
+//for blockchain
 
 export default class RequestData extends Component {
   constructor() {
@@ -89,14 +92,47 @@ export default class RequestData extends Component {
     this.setState({ open: false, accept: false });
   };
 
+  buyDataForTokens = async (tokens) => {
+    try {
+      const accounts = await web3.eth.getAccounts();
+      this.setState({
+        address: accounts[0]
+      })
+      await weHealthController.methods
+        .requestData(tokens)
+        .send({
+          from: accounts[0]
+        }).on('transactionHash', (hash) => {
+          console.log(hash);
+          this.setState({ transactionHash: 'https://rinkeby.etherscan.io/tx/' + hash })
+        }).on('confirmation', function () {
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   onRequest = () => {
-    sendRequest(
-      this.state.uid,
-      this.state.description,
-      this.state.count,
-      this.state.address
-    );
-    this.setState({ description: "", count: 1, open: false });
+    getTokenBalance()
+      .then(tokens => {
+        if (this.state.count * 100 <= tokens) {
+          this.buyDataForTokens(this.state.count * 100)
+          sendRequest(
+            this.state.uid,
+            this.state.description,
+            this.state.count,
+            this.state.address
+          );
+          this.setState({ description: "", count: 1, open: false });
+        } else {
+          swal({
+            title: "Transaction unsuccessful",
+            text: "You donot have sufficient tokens to perform this transaction.",
+            icon: "warning",
+            dangerMode: true,
+          })
+        }
+      })
   };
 
   increaseCount = () => {
@@ -121,6 +157,28 @@ export default class RequestData extends Component {
     }
     return requests;
   };
+
+  getTokensForData = async (address) => {
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await weHealthController.methods
+        .getTokenForData(address)
+        .send({
+          from: accounts[0]
+        }).on('transactionHash', (hash) => {
+          console.log(hash);
+          this.setState({ transactionHash: 'https://rinkeby.etherscan.io/tx/' + hash })
+        }).on('confirmation', function () {
+                swal({
+                  icon: "success",
+                  text: "Successfully Transfered"
+                });
+        })
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   onFileSubmit = e => {
     let file = this.upload.current.files[0];
     console.log(this.upload.current.files[0]);
@@ -144,11 +202,14 @@ export default class RequestData extends Component {
               .child(this.state.toSendUid)
               .push(obj)
               .then(() => {
-                this.setState({ open: false });
-                swal({
-                  icon: "success",
-                  text: "File Successfully Uploaded!"
-                });
+                this.getTokensForData(this.state.address)
+                .then(res => {
+                  this.setState({ open: false });
+                  swal({
+                    icon: "success",
+                    text: "File Successfully Uploaded!"
+                  });
+                })
               })
               .catch(e => {
                 swal({
@@ -161,9 +222,9 @@ export default class RequestData extends Component {
     e.preventDefault();
   };
 
-  openModal = ({ uid, data }) => {
+  openModal = ({ uid, data, address }) => {
     this.handleOpen();
-    this.setState({ accept: true, toSendUid: uid, toSendData: data });
+    this.setState({ accept: true, toSendUid: uid, toSendData: data, address : address });
   };
 
   _resize_mixin_callback = () => {
@@ -208,20 +269,20 @@ export default class RequestData extends Component {
                     <Button text="Submit Request" onClick={this.onRequest} />{" "}
                   </>
                 ) : (
-                  <>
-                    <h6>Enter File to Send</h6>
-                    <form onSubmit={this.onFileSubmit}>
-                      <input type="file" ref={this.upload} />
-                      <Button
-                        onClick={() => {
-                          console.log("confirm");
-                        }}
-                        text="Confirm"
-                        buttonType="submit"
-                      />
-                    </form>
-                  </>
-                )}
+                    <>
+                      <h6>Enter File to Send</h6>
+                      <form onSubmit={this.onFileSubmit}>
+                        <input type="file" ref={this.upload} />
+                        <Button
+                          onClick={() => {
+                            console.log("confirm");
+                          }}
+                          text="Confirm"
+                          buttonType="submit"
+                        />
+                      </form>
+                    </>
+                  )}
               </Col>
             </Row>
           </Container>
@@ -257,8 +318,8 @@ export default class RequestData extends Component {
                           onClick={this.openModal}
                         />
                       ) : (
-                        ""
-                      )}
+                          ""
+                        )}
                     </Col>
                   </Paper>
                 </Col>

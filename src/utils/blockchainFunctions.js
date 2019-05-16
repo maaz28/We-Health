@@ -28,6 +28,7 @@ export const buyDataForTokens = async (tokens) => {
   }
 };
 
+
 export const getTokensForData = async (address) => {
   try {
     const accounts = await web3.eth.getAccounts();
@@ -45,3 +46,27 @@ export const getTokensForData = async (address) => {
     console.log(e);
   }
 };
+
+
+
+export const buyTokens = async (ether) => {
+  try {
+    const accounts = await web3.eth.getAccounts();
+    await weHealthController.methods
+      .buyToken().send({
+        from: accounts[0],
+        value: web3.utils.toWei(ether, 'ether')
+      }).on('transactionHash', (hash) => {
+        console.log(hash)
+        // that.setState({transactionHash: 'https://rinkeby.etherscan.io/tx/' + hash})
+      }).on('confirmation', function (confirmationNumber, receipt) {
+        console.log(confirmationNumber + ' ' + receipt);
+        console.log("Transaction confirmed");
+      });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+
+

@@ -39,44 +39,10 @@ export default class AddData extends Component{
     createDataSet = () => {
         const data=[
                 {
-                    name:'Glucose',
-                    value: this.state.Glucose
-                },
-                {
-                    name:'Bilirubin',
-                    value: this.state.Bilirubin
-                },
-                {
-                    name:'Ketone',
-                    value: this.state.Ketone
-                },
-                {
-                    name:'SpecificGravity',
-                    value: this.state.SpecificGravity
-                },
-                {
-                    name:'RedCells',
-                    value: this.state.RedCells
-                },
-                {
-                    name:'pH',
-                    value: this.state.pH
-                },
-                {
-                    name:'Protien',
-                    value: this.state.Protien
-                },
-                {
-                    name:'Urobilinogen',
-                    value: this.state.Urobilinogen
-                },
-                {
-                    name:'Nitrite',
-                    value: this.state.Nitrite
-                },
-                {
-                    name:'Leucocytes',
-                    value: this.state.Leucocytes
+                columns: ['Glucose', 'Bilirubin', 'Ketone', 'SpecificGravity', 'RedCells', 'pH', 'Protien', 'Urobilinogen', 'Nitrite', 'Leucocytes',],
+                data:[
+                    [this.state.Glucose, this.state.Bilirubin, this.state.Ketone, this.state.SpecificGravity, this.state.RedCells, this.state.pH, this.state.Protien, this.state.Urobilinogen, this.state.Nitrite, this.state.Leucocytes]
+                    ],
                 },
             ]
             this.setState(prevState=>({
@@ -165,11 +131,11 @@ export default class AddData extends Component{
                         <Button text='Submit' />
                         </div> */}
                         <Button text='Submit' isDisabled={!this.state.dataSetButtonDisabled} onClick={this.createDataSet} />
-                                <ExcelFile filename={`WeHealth-${new Date().getTime().toString()}`} element={<Button style={downloadDisplay} text='Download ExcelSheet' isDisabled={this.state.dataSetButtonDisabled} onClick={this.download}  />}>
-                            <ExcelSheet data={this.state.data} name="DiseaseData" >
-                                <ExcelColumn label='Test Name' value='name' />
-                                <ExcelColumn label='Result' value='value' />
-                            </ExcelSheet>
+                        <ExcelFile filename={`WeHealth-${new Date().getTime().toString()}`} element={<Button style={downloadDisplay} text='Download ExcelSheet' isDisabled={this.state.dataSetButtonDisabled} onClick={this.download}  />}>
+                            <ExcelSheet dataSet={this.state.data} name="DiseaseData"  />
+                                {/* <ExcelColumn label='Test Name' value='name' />
+                                <ExcelColumn label='Result' value='value' /> */}
+                            {/* </ExcelSheet> */}
                         </ExcelFile>
                     </Paper>
                     </Col>

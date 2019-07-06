@@ -138,7 +138,7 @@ class Signup extends Component {
         error : false
       })
       try{
-        const res = await signup(this.state.email,this.state.password)
+        const res = await signup(this.state.name,this.state.email,this.state.password)
         this.props.history.push('/login')
       }
       catch(e){

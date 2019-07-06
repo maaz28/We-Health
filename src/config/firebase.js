@@ -12,12 +12,24 @@ var firebaseConfig = {
 
   firebase.initializeApp(firebaseConfig);
 
-  const signup = (email,password) => {
+  const signup = (name,email,password) => {
     return new Promise((resolve,reject)=>{
         firebase.auth().createUserWithEmailAndPassword(email,password)
         .then((user)=>{
           console.log('Signup successfull')
-          resolve(user)
+          let obj = {
+            name,
+            email,
+            uid: user.user.uid
+          }
+          firebase.database().ref('users').child(user.user.uid).set(obj)
+          .then(()=>{
+            resolve(user)
+          })
+            .catch((e) => {
+              const mess = e.message
+              reject({ message: mess })
+            })
         })
         .catch((e)=>{
           const mess=e.message

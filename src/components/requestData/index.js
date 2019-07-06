@@ -14,8 +14,10 @@ import { LoginConsumer } from "../../config/contextConfig.js";
 import { sendRequest, getRequests } from "../../config/firebase";
 import { getAccountAddress, getTokenBalance } from "../../utils/blockchainFunctions";
 import * as firebase from "firebase";
+import excelToJson from 'convert-excel-to-json';
 import weHealthController from "../../interface/weHealthController";
 import web3 from "../../interface/web3";
+import ExcelReader from './ExcelReader'
 //for blockchain
 
 export default class RequestData extends Component {
@@ -180,47 +182,61 @@ export default class RequestData extends Component {
   };
 
   onFileSubmit = e => {
+    e.preventDefault();
     let file = this.upload.current.files[0];
     console.log(this.upload.current.files[0]);
-    firebase
-      .storage()
-      .ref("files/" + file.name)
-      .put(file)
-      .then(success => {
-        firebase
-          .storage()
-          .ref("files/" + file.name)
-          .getDownloadURL()
-          .then(url => {
-            let obj = {
-              data: this.state.toSendData,
-              url
-            };
-            firebase
-              .database()
-              .ref("Accepts")
-              .child(this.state.toSendUid)
-              .push(obj)
-              .then(() => {
-                this.getTokensForData(this.state.address)
-                .then(res => {
-                  this.setState({ open: false });
-                  swal({
-                    icon: "success",
-                    text: "File Successfully Uploaded!"
-                  });
-                })
-              })
-              .catch(e => {
-                swal({
-                  icon: "warning",
-                  text: e.message
-                });
-              });
-          });
-      });
-    e.preventDefault();
+    // const result = excelToJson({
+    //   source: fs.readFileSync(file)
+    // })
+    // console.log('excel to json ===>',result)
+    // const reader = new FileReader();
+    // reader.onload = function () {
+    //   // text = reader.result;
+    //   // console.log(reader.result);
+    //   console.log('onsubmit ===>',reader.result)
+    // };
+    // console.log('reader read as text ===>',reader.readAsBinaryString(file))
+    // reader.readAsText(input.files[0]);
+    // firebase
+    //   .storage()
+    //   .ref("files/" + file.name)
+    //   .put(file)
+    //   .then(success => {
+    //     firebase
+    //       .storage()
+    //       .ref("files/" + file.name)
+    //       .getDownloadURL()
+    //       .then(url => {
+    //         let obj = {
+    //           data: this.state.toSendData,
+    //           url
+    //         };
+            // firebase
+            //   .database()
+            //   .ref("Accepts")
+            //   .child(this.state.toSendUid)
+            //   .push(obj)
+            //   .then(() => {
+            //     this.getTokensForData(this.state.address)
+            //     .then(res => {
+            //       this.setState({ open: false });
+            //       swal({
+            //         icon: "success",
+            //         text: "File Successfully Uploaded!"
+            //       });
+            //     })
+            //   })
+            //   .catch(e => {
+            //     swal({
+            //       icon: "warning",
+            //       text: e.message
+            //     });
+    //           });
+    //       });
+    //   });
   };
+
+
 
   openModal = ({ uid, data, address }) => {
     this.handleOpen();
@@ -271,16 +287,7 @@ export default class RequestData extends Component {
                 ) : (
                     <>
                       <h6>Enter File to Send</h6>
-                      <form onSubmit={this.onFileSubmit}>
-                        <input type="file" ref={this.upload} />
-                        <Button
-                          onClick={() => {
-                            console.log("confirm");
-                          }}
-                          text="Confirm"
-                          buttonType="submit"
-                        />
-                      </form>
+                      <ExcelReader handleClose={this.handleClose} getTokensForData={this.getTokensForData} address={this.state.address} toSendUid={this.state.toSendUid} />
                     </>
                   )}
               </Col>

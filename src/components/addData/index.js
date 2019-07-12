@@ -39,9 +39,9 @@ export default class AddData extends Component{
     createDataSet = () => {
         const data=[
                 {
-                columns: ['Glucose', 'Bilirubin', 'Ketone', 'SpecificGravity', 'RedCells', 'pH', 'Protien', 'Urobilinogen', 'Nitrite', 'Leucocytes',],
+                columns: ['Glucose', 'Bilirubin', 'Ketone', 'SpecificGravity', 'RedCells', 'pH', 'Protien', 'Urobilinogen', 'Nitrite', 'Leucocytes'],
                 data:[
-                    [this.state.Glucose, this.state.Bilirubin, this.state.Ketone, this.state.SpecificGravity, this.state.RedCells, this.state.pH, this.state.Protien, this.state.Urobilinogen, this.state.Nitrite, this.state.Leucocytes]
+                        [this.state.Glucose, this.state.Bilirubin, this.state.Ketone, this.state.SpecificGravity, this.state.RedCells, this.state.pH, this.state.Protien, this.state.Urobilinogen, this.state.Nitrite, this.state.Leucocytes]
                     ],
                 },
             ]

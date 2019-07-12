@@ -10,6 +10,7 @@ import {
   NavLink
 } from "shards-react";
 import { LoginConsumer } from "../../../../config/contextConfig.js";
+import * as firebase from "firebase";
 import { logout } from '../../../../config/firebase'
 
 export default class UserActions extends React.Component {
@@ -17,7 +18,8 @@ export default class UserActions extends React.Component {
     super(props);
 
     this.state = {
-      visible: false
+      visible: false,
+      name:''
     };
 
     this.toggleUserActions = this.toggleUserActions.bind(this);
@@ -34,6 +36,15 @@ export default class UserActions extends React.Component {
     });
   }
 
+  componentDidMount(){
+    let uid = sessionStorage.getItem('uid')
+    firebase.database().ref('users').child(uid)
+    .once('value',data=>{
+      let userData = data.val();
+      this.setState({name:userData.name})
+    })
+  }
+
   render() {
     return (
       <NavItem tag={Dropdown} caret toggle={this.toggleUserActions}>
@@ -43,7 +54,7 @@ export default class UserActions extends React.Component {
             src={require("./../../../../images/avatars/5.png")}
             alt="User Avatar"
           />{" "}
-          <span className="d-none d-md-inline-block">Sierra Brooks</span>
+          <span className="d-none d-md-inline-block">{this.state.name}</span>
         </DropdownToggle>
         <Collapse tag={DropdownMenu} right small open={this.state.visible}>
           {/* <DropdownItem tag={Link} to="user-profile">

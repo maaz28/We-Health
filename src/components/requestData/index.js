@@ -55,9 +55,12 @@ export default class RequestData extends Component {
       .on("value", data => {
         let userData = data.val();
         let requests = [];
+        let uid = sessionStorage.getItem('uid')
         for (let key in userData) {
-          for (let key1 in userData[key]) {
-            requests.push(userData[key][key1]);
+          if(key!==uid){
+            for (let key1 in userData[key]) {
+              requests.push(userData[key][key1]);
+            }
           }
         }
         this.setState({ data: requests });

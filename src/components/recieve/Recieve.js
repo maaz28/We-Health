@@ -20,7 +20,8 @@ export default class Recieve extends Component {
             data: [],
             downloadLink: '',
             gotContext: true,
-            uid: ''
+            uid: '',
+            count: 0
         }
     }
     componentDidMount() {
@@ -28,11 +29,21 @@ export default class Recieve extends Component {
             .on('value', (data) => {
                 let userData = data.val()
                 let requests = []
+                let count = 0;
                 for (let key in userData) {
+                    count++
+                    console.log('userData[key] ===>', userData[key])
                     requests.push(userData[key])
                 }
-                console.log(requests)
-                this.setState({ data: requests })
+                console.log('requests ===>', requests)
+                const res = [
+                    {
+                        columns: ['Glucose', 'Bilirubin', 'Ketone', 'SpecificGravity', 'RedCells', 'pH', 'Protien', 'Urobilinogen', 'Nitrite', 'Leucocytes'],
+                        data: [...requests],
+                    },
+                ]
+                console.log('res ===>', res)
+                this.setState({ data: res, count })
             })
 
     }
@@ -43,6 +54,8 @@ export default class Recieve extends Component {
 
 
     render() {
+        const ExcelFile = ReactExport.ExcelFile;
+        const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
         return (
             <>
                 <Container fluid className="main-content-container px-4 pb-4">
@@ -55,7 +68,18 @@ export default class Recieve extends Component {
                                 <Row>
                                     <Col>
                                         <h5>Recieved Data</h5>
-                                        {this.state.data ? (<Table data={this.state.data} buttonText='download' onClick={this.clicked} />) : ('')}
+                                        <Row>
+                                            <Col lg={8} >
+                                                <h6 style={{ textAlign: 'center',marginTop:10 }} >{this.state.count} data recieved</h6>
+                                            </Col>
+                                            <Col lg={4} >
+                                                {/* {this.state.data ? (<Table data={this.state.data} buttonText='download' onClick={this.clicked} />) : ('')} */}
+                                                {this.state.count ?
+                                                    <ExcelFile filename={`WeHealth-Recieve-${new Date().getTime().toString()}`} element={<Button text='Download Data' onClick={() => console.log('downloaded')} />}>
+                                                        <ExcelSheet dataSet={this.state.data} name="DiseaseData" />
+                                                    </ExcelFile> : ''}
+                                            </Col>
+                                        </Row>
                                     </Col>
                                 </Row>
                             </Paper>

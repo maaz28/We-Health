@@ -27,7 +27,7 @@ class ExcelReader extends Component {
         /* Boilerplate to set up FileReader */
         const reader = new FileReader();
         const rABS = !!reader.readAsBinaryString;
-
+        let data
         reader.onload = (e) => {
             /* Parse data */
             const bstr = e.target.result;
@@ -36,33 +36,13 @@ class ExcelReader extends Component {
             const wsname = wb.SheetNames[0];
             const ws = wb.Sheets[wsname];
             /* Convert array of arrays */
-            const data = XLSX.utils.sheet_to_json(ws);
+            data = XLSX.utils.sheet_to_json(ws);
             /* Update state */
             this.setState({ data: data, cols: make_cols(ws['!ref']) }, () => {
                 console.log(JSON.stringify(this.state.data, null, 2));
             });
-            console.log('state data ===>',this.state.data.data)
-            firebase
-                .database()
-                .ref("Accepts")
-                .child(this.props.toSendUid)
-                .push(this.state.data.data)
-                .then(() => {
-                    this.props.getTokensForData(this.props.address)
-                        .then(res => {
-                            this.props.handleClose()
-                            swal({
-                                icon: "success",
-                                text: "File Successfully Uploaded!"
-                            });
-                        })
-                })
-                .catch(e => {
-                    swal({
-                        icon: "warning",
-                        text: e.message
-                    });
-                })
+            console.log('state data ===>', JSON.stringify(this.state.data, null, 2))
+            this.sendData(data)
         };
 
         if (rABS) {
@@ -70,6 +50,44 @@ class ExcelReader extends Component {
         } else {
             reader.readAsArrayBuffer(this.state.file);
         };
+
+    }
+
+    sendData = async (data) => {
+        // console.log('this.props.toSendUid ===>', this.props.toSendUid)
+        // console.log('this.state.data.data ===>', data)
+        // const myData = {...data}
+        // console.log('myData ===>', myData)
+        let result=[];
+        for(let key in data ){
+            for(let key1 in data[key]){
+                result.push((data[key][key1]).toString())
+            }
+        }
+        // console.log('result ===>',result)
+        await firebase.database().ref("Accepts").child(this.props.toSendUid).push(result)
+            .then(() => {
+                // this.props.getTokensForData(this.props.address)
+                //     .then(res => {
+                this.props.handleClose()
+                swal({
+                    icon: "success",
+                    text: "File Successfully Uploaded!"
+                })
+                    .catch(e => {
+                        swal({
+                            icon: "warning",
+                            text: e.message
+                        });
+                    })
+                // })
+            })
+            .catch(e => {
+                swal({
+                    icon: "warning",
+                    text: e.message
+                });
+            })
     }
 
     render() {

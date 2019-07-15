@@ -42,7 +42,8 @@ const login = (email,password,ev) => {
   return new Promise((resolve,reject)=>{
     firebase.auth().signInWithEmailAndPassword(email,password)
     .then((user)=>{
-      console.log('logged in')
+      console.log('logged in--->',user)
+      sessionStorage.setItem('uid',user.user.uid)
       resolve(user)
       console.log(user.user.uid)
       ev()

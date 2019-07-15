@@ -1,4 +1,4 @@
 import React from 'react'
-import Recieve from './config'
+import Recieve from './Recieve'
 
 export default () => <Recieve />

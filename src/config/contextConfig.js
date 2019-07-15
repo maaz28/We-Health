@@ -3,9 +3,9 @@ import React from "react";
 const LoginContext = React.createContext({
     login : false,
     uid: '',
-    gotUid: true,
     isLogin : () => {},
-    gotUidFn : () => {},
+    // gotUid: true,
+    // gotUidFn : () => {},
     isBalanceUpdate : false,
     updateBalance : () => {}
 });

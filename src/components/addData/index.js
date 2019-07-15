@@ -5,9 +5,6 @@ import Paper from '../common/Paper'
 import Input from '../common/InputFullWidth'
 import PageTitle from '../common/PageTitle'
 import Button from '../common/Button'
-import * as firebase from 'firebase'
-import {currentUser} from '../../config/firebase'
-import {LoginConsumer} from '../../config/contextConfig'
 
 export default class AddData extends Component{
     constructor(){
@@ -56,12 +53,6 @@ export default class AddData extends Component{
         console.log('downloaded!')
     }
 
-    // componentDidMount(){
-    //     this.props.currentUser()
-    //     // const data = firebase.auth().currentUser
-    //     // console.log(data.uid)
-    // }
-    
 
     render(){
         const ExcelFile = ReactExport.ExcelFile;
@@ -70,15 +61,6 @@ export default class AddData extends Component{
         const downloadDisplay = this.state.check ? {display:'none'} : {}
         return(
             <>
-            <LoginConsumer>
-                {({gotUid, gotUidFn})=>{
-                    if(gotUid){
-                        console.log('gotuid ===>',gotUid)
-                        const data = firebase.auth().currentUser
-                        gotUidFn(data.uid)
-                    }
-                }}
-            </LoginConsumer>
             <Container fluid className="main-content-container px-4 pb-4">
             <Row noGutters className="page-header py-4">
                 <PageTitle title="Add Data" subtitle="Component" className="text-sm-left mb-3" />
@@ -127,15 +109,9 @@ export default class AddData extends Component{
                             <Input onChange={this.handleChange} value={this.state.Leucocytes} name='Leucocytes' label='Leucocytes' />
                         </Col>
                         </Row>
-                        {/* <div style={{textAlign:'right'}} >
-                        <Button text='Submit' />
-                        </div> */}
                         <Button text='Submit' isDisabled={!this.state.dataSetButtonDisabled} onClick={this.createDataSet} />
                         <ExcelFile filename={`WeHealth-${new Date().getTime().toString()}`} element={<Button style={downloadDisplay} text='Download ExcelSheet' isDisabled={this.state.dataSetButtonDisabled} onClick={this.download}  />}>
                             <ExcelSheet dataSet={this.state.data} name="DiseaseData"  />
-                                {/* <ExcelColumn label='Test Name' value='name' />
-                                <ExcelColumn label='Result' value='value' /> */}
-                            {/* </ExcelSheet> */}
                         </ExcelFile>
                     </Paper>
                     </Col>

@@ -25,7 +25,8 @@ export default class Recieve extends Component {
         }
     }
     componentDidMount() {
-        firebase.database().ref('Accepts').child(this.props.uid)
+        let uid = sessionStorage.getItem('uid')
+        firebase.database().ref('Accepts').child(uid)
             .on('value', (data) => {
                 let userData = data.val()
                 let requests = []

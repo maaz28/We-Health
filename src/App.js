@@ -19,8 +19,8 @@ export default class App extends Component {
       login: JSON.parse(sessionStorage.getItem('user'))  || false,
       uid: sessionStorage.getItem('uid') || '' ,
       isLogin: this.isLogin,
-      gotUid: JSON.parse(sessionStorage.getItem('uidGot')) !== false ? true : false,
-      gotUidFn: this.gotUidFn,
+      // gotUid: JSON.parse(sessionStorage.getItem('uidGot')) !== false ? true : false,
+      // gotUidFn: this.gotUidFn,
       isBalanceUpdate : false,
       updateBalance: this.updateBalance
     };
@@ -45,11 +45,11 @@ export default class App extends Component {
     console.log('app.js ===>',this.state.login)
   };
 
-  gotUidFn = (uid) => {
-    this.setState({uid,gotUid:false})
-    sessionStorage.setItem('uidGot',false)
-    sessionStorage.setItem('uid',uid)
-  }
+  // gotUidFn = (uid) => {
+  //   this.setState({uid,gotUid:false})
+  //   sessionStorage.setItem('uidGot',false)
+  //   sessionStorage.setItem('uid',uid)
+  // }
   
   componentDidMount(){
     getTokenBalance();

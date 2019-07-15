@@ -9,6 +9,7 @@ import Button from '../common/Button'
 import weHealthController from '../../interface/weHealthController';
 import web3 from '../../interface/web3';
 import swal from 'sweetalert';
+import { LoginConsumer } from '../../config/contextConfig';
 
 //BLOCKCHAIN DEPENDENCIES
 // import web3 from '../interface/web3';
@@ -24,7 +25,7 @@ export default class Recieve extends Component {
         }
     }
 
-    buyTokens = async (ether) => {
+    buyTokens = async (ether, updateBalance) => {
         let that = this;
         try {
             const accounts = await web3.eth.getAccounts();
@@ -41,6 +42,7 @@ export default class Recieve extends Component {
                     that.setState({
                         transactionHash : ''
                     })
+                    updateBalance(); // update the balance
                     swal({
                         title: "Transaction Successfull",
                         text: that.state.value * 100 + " Tokens have added to your account.",
@@ -59,8 +61,8 @@ export default class Recieve extends Component {
         })
     }
 
-    tokenBuyHandler = () => {
-        this.buyTokens(this.state.value)
+    tokenBuyHandler = (updateBalance) => {
+        this.buyTokens(this.state.value, updateBalance)
             .then(res => console.log(res))
     }
 
@@ -81,7 +83,16 @@ export default class Recieve extends Component {
                                             <Input label='Enter Token' onChange={this.tokenHandler} />
                                         </Col>
                                         <Col lg={5} >
-                                            <Button text='buy' onClick={this.tokenBuyHandler} />
+                                            <LoginConsumer>
+                                                {({ updateBalance }) => {
+                                                    return(
+                                                        <Button text='buy' onClick={
+                                                            () => { this.tokenBuyHandler(updateBalance)}
+                                                            } 
+                                                            />
+                                                    )
+                                                }}
+                                                </LoginConsumer>
                                         </Col>
                                         <Col lg={5} >
                                             Track your transaction here <a href={this.state.transactionHash} target="_blank"> {this.state.transactionHash} </a>

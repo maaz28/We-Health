@@ -20,8 +20,16 @@ export default class App extends Component {
       uid: sessionStorage.getItem('uid') || '' ,
       isLogin: this.isLogin,
       gotUid: JSON.parse(sessionStorage.getItem('uidGot')) !== false ? true : false,
-      gotUidFn: this.gotUidFn
+      gotUidFn: this.gotUidFn,
+      isBalanceUpdate : false,
+      updateBalance: this.updateBalance
     };
+  }
+
+  updateBalance = () => {
+    this.setState(state => ({
+      isBalanceUpdate: !state.isBalanceUpdate
+    }));
   }
   
   isLogin = () => {

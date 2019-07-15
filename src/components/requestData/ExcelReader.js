@@ -58,29 +58,29 @@ class ExcelReader extends Component {
         // console.log('this.state.data.data ===>', data)
         // const myData = {...data}
         // console.log('myData ===>', myData)
-        let result=[];
-        for(let key in data ){
-            for(let key1 in data[key]){
+        let result = [];
+        for (let key in data) {
+            for (let key1 in data[key]) {
                 result.push((data[key][key1]).toString())
             }
         }
         // console.log('result ===>',result)
         await firebase.database().ref("Accepts").child(this.props.toSendUid).push(result)
             .then(() => {
-                // this.props.getTokensForData(this.props.address)
-                //     .then(res => {
-                this.props.handleClose()
-                swal({
-                    icon: "success",
-                    text: "File Successfully Uploaded!"
-                })
-                    .catch(e => {
+                this.props.getTokensForData(this.props.address)
+                    .then(res => {
+                        this.props.handleClose()
                         swal({
-                            icon: "warning",
-                            text: e.message
-                        });
+                            icon: "success",
+                            text: "File Successfully Uploaded!"
+                        })
+                            .catch(e => {
+                                swal({
+                                    icon: "warning",
+                                    text: e.message
+                                });
+                            })
                     })
-                // })
             })
             .catch(e => {
                 swal({

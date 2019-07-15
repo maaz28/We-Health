@@ -5,7 +5,9 @@ const LoginContext = React.createContext({
     uid: '',
     gotUid: true,
     isLogin : () => {},
-    gotUidFn : () => {}
+    gotUidFn : () => {},
+    isBalanceUpdate : false,
+    updateBalance : () => {}
 });
 
 export const LoginProvider = LoginContext.Provider;

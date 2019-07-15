@@ -71,7 +71,7 @@ export default class AddData extends Component{
         return(
             <>
             <LoginConsumer>
-                {({gotUid,gotUidFn})=>{
+                {({gotUid, gotUidFn})=>{
                     if(gotUid){
                         console.log('gotuid ===>',gotUid)
                         const data = firebase.auth().currentUser

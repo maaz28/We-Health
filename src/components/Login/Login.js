@@ -146,11 +146,6 @@ class Login extends Component {
       // }
     }
   }
-
-
-   Handler(){
-    this.props.signupHandler();
-  }
   
   render(){
     const { classes } = this.props;

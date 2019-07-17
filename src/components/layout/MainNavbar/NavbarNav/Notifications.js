@@ -24,8 +24,9 @@ export default class Notifications extends React.Component {
         <LoginConsumer>{({ isBalanceUpdate }) => {
           if(isBalanceUpdate == true || isBalanceUpdate == false) {
             getTokenBalance().then((token) => {
+
               this.setState({
-                balance: token
+                balance: Math.round(token * 100) / 100 
               })
             })
           }

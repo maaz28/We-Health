@@ -20,6 +20,7 @@ import web3 from "../../interface/web3";
 import ExcelReader from './ExcelReader'
 //for blockchain
 
+let firstTime = true;
 export default class RequestData extends Component {
   constructor() {
     super();
@@ -174,10 +175,12 @@ export default class RequestData extends Component {
           console.log(hash);
           this.setState({ transactionHash: 'https://rinkeby.etherscan.io/tx/' + hash })
         }).on('confirmation', function () {
+          if (firstTime) {
                 swal({
                   icon: "success",
                   text: "Successfully Transfered"
                 });
+              }
         })
     } catch (e) {
       console.log(e);

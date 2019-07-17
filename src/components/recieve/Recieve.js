@@ -31,12 +31,12 @@ export default class Recieve extends Component {
                 let userData = data.val()
                 let requests = []
                 let count = 0;
-                for (let key in userData) {
+                for (let key in userData) { //loop
                     count++
                     console.log('userData[key] ===>', userData[key])
                     requests.push(userData[key])
                 }
-                console.log('requests ===>', requests)
+                console.log('requests ===>', requests);
                 const res = [
                     {
                         columns: ['Glucose', 'Bilirubin', 'Ketone', 'SpecificGravity', 'RedCells', 'pH', 'Protien', 'Urobilinogen', 'Nitrite', 'Leucocytes'],

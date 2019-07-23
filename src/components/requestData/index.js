@@ -124,7 +124,7 @@ export default class RequestData extends Component {
         if (this.state.count * 100 <= tokens) {
           this.buyDataForTokens(this.state.count * 100)
           sendRequest(
-            this.state.uid,
+            sessionStorage.getItem('uid'),
             this.state.description,
             this.state.count,
             this.state.address
